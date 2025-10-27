@@ -26,8 +26,6 @@ app.use(cors({
   exposedHeaders: ["Content-Range", "X-Content-Range"]
 }));
 
-// Handle preflight requests
-app.options('*', cors()); // Enable preflight for all routes
 
 // Security middleware
 app.use(express.json({ limit: "10mb" }));
