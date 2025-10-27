@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 secure-key-manager/
 ├─ backend/
 │  ├─ src/
@@ -56,3 +57,7 @@ secure-key-manager/
 │  └─ vite.config.js
 ├─ ~$oject_progress.docx
 └─ project_progress.docx
+=======
+# secure-key-manager
+Secure API Key Management System with encryption and audit logs
+>>>>>>> 98c0e8f841883df171fa05c25d17f80262a3c7a0
