@@ -45,13 +45,11 @@ api.interceptors.response.use(
     // Handle network errors
     if (!error.response) {
       console.error("Network error:", error.message);
-      // You can show a user-friendly message here
     }
     
     // Handle authentication errors
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
-      // Optional: redirect to login page
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }
