@@ -52,11 +52,12 @@ app.get("/", (req, res) => {
   });
 });
 
-// 404 handler for undefined routes
-app.use("*", (req, res) => {
+// ✅ FIXED: 404 handler without wildcard parameter
+app.use((req, res) => {
   res.status(404).json({ 
     error: "Route not found",
-    path: req.originalUrl 
+    path: req.originalUrl,
+    message: "The requested endpoint does not exist"
   });
 });
 
