@@ -23,6 +23,12 @@ app.use(cors({
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
+// Debug middleware to log all incoming requests
+app.use((req, res, next) => {
+  console.log(`📨 ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Health check route
 app.get("/health", (req, res) => {
   res.status(200).json({ 
@@ -32,22 +38,33 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Debug: Test if authRoutes is loaded
+console.log("🔄 Loading routes...");
+console.log("🔍 authRoutes:", typeof authRoutes);
+
 // Routes
 app.use("/api/test-user", testUserRoutes);
 app.use("/api/api-key", apiKeyRoutes);
 app.use("/api/auth", authRoutes);
+
+// Test route to verify routing works
+app.post("/api/test-register", (req, res) => {
+  res.json({ message: "Test route works!", timestamp: new Date().toISOString() });
+});
 
 // Root route
 app.get("/", (req, res) => {
   res.json({ 
     message: "Secure API Key Management System Backend is Running 🚀",
     version: "1.0.0",
-    environment: process.env.NODE_ENV || "development"
+    environment: process.env.NODE_ENV || "development",
+    routes: ["/api/auth/register", "/api/auth/login", "/api/test-register"]
   });
 });
 
 // 404 handler
 app.use((req, res) => {
+  console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({ 
     error: "Route not found",
     path: req.originalUrl
@@ -71,6 +88,10 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`🔗 Test routes:`);
+      console.log(`   - GET  http://localhost:${PORT}/health`);
+      console.log(`   - POST http://localhost:${PORT}/api/test-register`);
+      console.log(`   - POST http://localhost:${PORT}/api/auth/register`);
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error);
