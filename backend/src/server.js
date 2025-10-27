@@ -20,23 +20,12 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
-// Add this RIGHT AFTER your CORS middleware
-
-// Handle preflight OPTIONS requests explicitly
-app.options('*', (req, res) => {
+// ✅ FIXED: Handle preflight OPTIONS requests for ALL routes
+app.options('/*', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   res.sendStatus(200);
-});
-
-// Also add a simple test POST route to verify routing
-app.post("/api/simple-test", (req, res) => {
-  console.log("✅ Simple test route hit!");
-  res.json({ 
-    message: "Simple test route works!",
-    timestamp: new Date().toISOString()
-  });
 });
 
 app.use(express.json({ limit: "10mb" }));
@@ -67,8 +56,12 @@ app.use("/api/api-key", apiKeyRoutes);
 app.use("/api/auth", authRoutes);
 
 // Test route to verify routing works
-app.post("/api/test-register", (req, res) => {
-  res.json({ message: "Test route works!", timestamp: new Date().toISOString() });
+app.post("/api/simple-test", (req, res) => {
+  console.log("✅ Simple test route hit!");
+  res.json({ 
+    message: "Simple test route works!",
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Root route
@@ -77,7 +70,7 @@ app.get("/", (req, res) => {
     message: "Secure API Key Management System Backend is Running 🚀",
     version: "1.0.0",
     environment: process.env.NODE_ENV || "development",
-    routes: ["/api/auth/register", "/api/auth/login", "/api/test-register"]
+    routes: ["/api/auth/register", "/api/auth/login", "/api/simple-test"]
   });
 });
 
@@ -109,7 +102,7 @@ const startServer = async () => {
       console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`🔗 Test routes:`);
       console.log(`   - GET  http://localhost:${PORT}/health`);
-      console.log(`   - POST http://localhost:${PORT}/api/test-register`);
+      console.log(`   - POST http://localhost:${PORT}/api/simple-test`);
       console.log(`   - POST http://localhost:${PORT}/api/auth/register`);
     });
   } catch (error) {
