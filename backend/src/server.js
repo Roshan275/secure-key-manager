@@ -1,10 +1,10 @@
 //backend/src/server.js
 
 const dotenv = require("dotenv");
-dotenv.config();   // must be first
+dotenv.config();
 
 const express = require("express");
-const cors = require("cors"); // Add CORS
+const cors = require("cors");
 const connectDB = require("./config/db.js");
 const testUserRoutes = require("./routes/testUser.js");
 const apiKeyRoutes = require("./routes/ApiKey.js");
@@ -12,22 +12,14 @@ const authRoutes = require("./routes/auth.js");
 
 const app = express();
 
+// ✅ TEMPORARY FIX - Allow ALL origins during development
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "https://secure-key-manager-git-main-roshans-projects-bc5254b3.vercel.app", // Your current Vercel URL
-    "https://secure-key-manager.vercel.app", // Your main Vercel URL
-    "https://*.vercel.app"
-  ],
+  origin: "*", // Allow ALL origins - remove this in production
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  exposedHeaders: ["Content-Range", "X-Content-Range"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
-
-// Security middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -54,12 +46,11 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ FIXED: 404 handler without wildcard parameter
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ 
     error: "Route not found",
-    path: req.originalUrl,
-    message: "The requested endpoint does not exist"
+    path: req.originalUrl
   });
 });
 
@@ -80,7 +71,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🌐 Health check: http://localhost:${PORT}/health`);
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error);
