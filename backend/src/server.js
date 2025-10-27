@@ -12,21 +12,8 @@ const authRoutes = require("./routes/auth.js");
 
 const app = express();
 
-// ✅ TEMPORARY FIX - Allow ALL origins during development
-app.use(cors({
-  origin: "*", // Allow ALL origins - remove this in production
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
-}));
-
-// ✅ FIXED: Handle preflight OPTIONS requests for ALL routes
-app.options('/*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  res.sendStatus(200);
-});
+// ✅ SIMPLE CORS - Let the cors package handle everything
+app.use(cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +42,7 @@ app.use("/api/test-user", testUserRoutes);
 app.use("/api/api-key", apiKeyRoutes);
 app.use("/api/auth", authRoutes);
 
-// Test route to verify routing works
+// Simple test route
 app.post("/api/simple-test", (req, res) => {
   console.log("✅ Simple test route hit!");
   res.json({ 
@@ -69,8 +56,7 @@ app.get("/", (req, res) => {
   res.json({ 
     message: "Secure API Key Management System Backend is Running 🚀",
     version: "1.0.0",
-    environment: process.env.NODE_ENV || "development",
-    routes: ["/api/auth/register", "/api/auth/login", "/api/simple-test"]
+    environment: process.env.NODE_ENV || "development"
   });
 });
 
@@ -100,10 +86,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🔗 Test routes:`);
-      console.log(`   - GET  http://localhost:${PORT}/health`);
-      console.log(`   - POST http://localhost:${PORT}/api/simple-test`);
-      console.log(`   - POST http://localhost:${PORT}/api/auth/register`);
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error);
