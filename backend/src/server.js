@@ -20,6 +20,25 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
+// Add this RIGHT AFTER your CORS middleware
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.sendStatus(200);
+});
+
+// Also add a simple test POST route to verify routing
+app.post("/api/simple-test", (req, res) => {
+  console.log("✅ Simple test route hit!");
+  res.json({ 
+    message: "Simple test route works!",
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
