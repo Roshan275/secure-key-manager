@@ -20,32 +20,11 @@ export default function App() {
           <Route path="/register" element={<Register />} />
 
           {/* Protect dashboard */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>}/>
           {/* Optional: redirect root to login */}
           <Route path="/" element={<Login />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/audit-logs"
-            element={
-              <ProtectedRoute>
-                <AuditLogs />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>}/>
+          <Route path="/audit-logs" element={ <ProtectedRoute> <AuditLogs /> </ProtectedRoute>}/>
         </Routes>
       </Router>
     </AuthProvider>

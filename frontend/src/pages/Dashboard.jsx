@@ -61,7 +61,7 @@ export default function Dashboard() {
     e.preventDefault();
     try {
       await api.post("/api-key/add", newKey);
-      alert("✅ API Key added successfully!");
+      alert("API Key added successfully!");
       setShowForm(false);
       setNewKey({ name: "", service: "", key: "", expiresAt: "" });
       fetchApiKeys();

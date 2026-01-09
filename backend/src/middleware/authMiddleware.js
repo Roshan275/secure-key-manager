@@ -1,11 +1,9 @@
-// src/middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET || "change_this_in_prod";
+const JWT_SECRET = process.env.JWT_SECRET;
 
-/**
- * protect(requiredRoles = []) - middleware factory
- * requiredRoles: optional array of roles e.g. ['admin']
- */
+//protect(requiredRoles = []) - middleware factory
+//requiredRoles: optional array of roles e.g.['admin']
+
 function protect(requiredRoles = []) {
   return (req, res, next) => {
     const header = req.headers.authorization;

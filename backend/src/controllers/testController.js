@@ -1,11 +1,7 @@
-// src/routes/testUser.js
-const express = require("express");
 const User = require("../models/User");
-const protect = require("../middleware/authMiddleware"); // use your auth middleware
-const router = express.Router();
 
-// GET current logged-in user
-router.get("/me", protect(), async (req, res) => {
+// get logged in user
+const handleMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -13,10 +9,10 @@ router.get("/me", protect(), async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+};
 
-// CREATE a user
-router.post("/create", async (req, res) => {
+// create user
+const handleCreate = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
@@ -28,20 +24,20 @@ router.post("/create", async (req, res) => {
       return res.status(409).json({ message: "Email already exists" });
     res.status(500).json({ message: "Server error", error: err.message });
   }
-});
+};
 
-// READ all users
-router.get("/", async (req, res) => {
+//get all users
+const handleGetAll = async (req, res) => {
   try {
     const users = await User.find().lean().select("-password");
     res.json({ ok: true, users });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+};
 
-// DELETE user by ID
-router.delete("/:id", async (req, res) => {
+//delete a user :id
+const handleDelete = async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await User.findByIdAndDelete(id);
@@ -50,6 +46,11 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  handleMe,
+  handleCreate,
+  handleGetAll,
+  handleDelete,
+};

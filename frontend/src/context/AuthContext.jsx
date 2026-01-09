@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import { createContext, useState, useEffect, useContext } from "react";
 import api from "../api/api";
 
@@ -16,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const res = await api.get("/test-user/me");
           setUser(res.data.user);
-          localStorage.setItem("role", res.data.user.role); // ✅ ensure role exists
+          localStorage.setItem("role", res.data.user.role); // ensure role exists
         } catch (err) {
           console.error("Token validation failed:", err);
           logout();
@@ -30,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await api.post("/auth/login", { email, password });
     localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.user.role); // ✅ store role
+    localStorage.setItem("role", res.data.user.role); // store role
     setUser(res.data.user);
   };
 
@@ -43,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       role,
     });
     localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.user.role); // ✅ store role
+    localStorage.setItem("role", res.data.user.role); // store role
     setUser(res.data.user);
   };
 

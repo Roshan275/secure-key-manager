@@ -1,5 +1,3 @@
-// src/models/ApiKey.js
-
 const mongoose = require("mongoose");
 
 const rotationHistorySchema = new mongoose.Schema({
@@ -14,7 +12,7 @@ const apiKeySchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   expiresAt: { type: Date, default: null },
   rotationHistory: [rotationHistorySchema], // keeps previous keys
-  revoked: { type: Boolean, default: false }, // NEW: track revoked keys
+  revoked: { type: Boolean, default: false }, // track revoked keys
   createdAt: { type: Date, default: Date.now }
 });
 
