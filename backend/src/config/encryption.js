@@ -4,9 +4,6 @@ const algorithm = "aes-256-cbc";                   // Symmetric encryption
 const secretKey = process.env.ENCRYPTION_KEY;      // Must be 32 bytes
 const ivLength = 16;                               // AES block size
 
-console.log("ENCRYPTION_KEY:", process.env.ENCRYPTION_KEY);
-
-
 // Encrypt function
 function encrypt(text) {
   const iv = crypto.randomBytes(ivLength);
